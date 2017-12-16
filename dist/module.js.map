@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/module.js"],"names":["LeafletChoroplethCtrl"],"mappings":";;;;;;;;AAAQA,2B,4BAAAA,qB;;;2BAGNA,qB","file":"module.js","sourcesContent":["import {LeafletChoroplethCtrl} from './leaflet_choropleth_ctrl';\n\nexport {\n  LeafletChoroplethCtrl as PanelCtrl\n};\n"]}
