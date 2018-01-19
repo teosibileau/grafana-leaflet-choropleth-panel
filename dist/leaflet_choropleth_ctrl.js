@@ -3,7 +3,7 @@
 System.register(['app/plugins/sdk', 'moment', 'lodash', 'jquery'], function (_export, _context) {
   "use strict";
 
-  var PanelCtrl, moment, _, $, _createClass, LeafletChoroplethCtrl;
+  var PanelCtrl, moment, _, $, _createClass, panelDefaults, LeafletChoroplethCtrl;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -64,6 +64,12 @@ System.register(['app/plugins/sdk', 'moment', 'lodash', 'jquery'], function (_ex
         };
       }();
 
+      panelDefaults = {
+        polygonsHotColor: "rgb(255, 0, 0)",
+        polygonsColdColor: "rgb(0, 0, 255)",
+        polygonsEndpoint: null
+      };
+
       _export('LeafletChoroplethCtrl', LeafletChoroplethCtrl = function (_PanelCtrl) {
         _inherits(LeafletChoroplethCtrl, _PanelCtrl);
 
@@ -72,22 +78,29 @@ System.register(['app/plugins/sdk', 'moment', 'lodash', 'jquery'], function (_ex
 
           var _this = _possibleConstructorReturn(this, (LeafletChoroplethCtrl.__proto__ || Object.getPrototypeOf(LeafletChoroplethCtrl)).call(this, $scope, $injector));
 
-          _this.events.on('data-received', _this.onDataReceived.bind(_this));
-          _this.events.on('data-error', _this.onDataError.bind(_this));
-          _this.events.on('data-snapshot-load', _this.onDataReceived.bind(_this));
-          _this.updateClock();
+          _.defaultsDeep(_this.panel, panelDefaults);
+          _this.events.on('init-edit-mode', _this.onInitEditMode.bind(_this));
+          // this.events.on('data-received', this.onDataReceived.bind(this));
+          // this.events.on('data-error', this.onDataError.bind(this));
+          // this.events.on('data-snapshot-load', this.onDataReceived.bind(this));
+          _this.updateMap();
           return _this;
         }
 
         _createClass(LeafletChoroplethCtrl, [{
-          key: 'updateClock',
-          value: function updateClock() {
+          key: 'updateMap',
+          value: function updateMap() {
             var _this2 = this;
 
             this.time = moment().format('hh:mm:ss');
             this.$timeout(function () {
-              _this2.updateClock();
+              _this2.updateMap();
             }, 1000);
+          }
+        }, {
+          key: 'onInitEditMode',
+          value: function onInitEditMode() {
+            this.addEditorTab('Polygon Options', 'public/plugins/leaflet-choropleth-panel/editor.html', 2);
           }
         }, {
           key: 'onDataReceived',
