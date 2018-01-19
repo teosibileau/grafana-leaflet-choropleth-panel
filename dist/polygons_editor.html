@@ -1,0 +1,24 @@
+<div class="editor-row">
+  <div class="section gf-form-group">
+    <h5 class="section-heading">Endpoint</h5>
+     <div class="gf-form">
+      <label class="gf-form-label width-4">URI</label>
+      <input type="text" class="input-medium gf-form-input max-width-40" ng-model="ctrl.panel.polygons.endpoint" ng-change="ctrl.fetchPolygons()" ng-model-onblur>
+    </div>
+  </div>
+  <div class="section gf-form-group">
+    <h5 class="section-heading">Styling</h5>
+    <div class="gf-form">
+      <label class="gf-form-label width-4">Hot</label>
+      <span class="max-width-3">
+        <spectrum-picker class="gf-form-input" ng-model="ctrl.panel.polygons.hotColor" ng-change="ctrl.render()" ></spectrum-picker>
+      </span>
+    </div>
+    <div class="gf-form">
+      <label class="gf-form-label width-4">Cold</label>
+      <span class="max-width-3">
+        <spectrum-picker class="gf-form-input" ng-model="ctrl.panel.polygons.coldColor" ng-change="ctrl.render()" ></spectrum-picker>
+      </span>
+    </div>
+  </div>
+</div>

@@ -15,6 +15,12 @@ module.exports = (grunt) => {
         src: ['**/*', '!**/*.js', '!**/*.scss', '!img/**/*'],
         dest: 'dist'
       },
+      bower_components_to_dist: {
+        cwd: 'bower_components',
+        expand: true,
+        src: ['**/dist/*.js', '**/dist/*.css'],
+        dest: 'dist/external'
+      },
       pluginDef: {
         expand: true,
         src: ['plugin.json', 'README.md'],
@@ -55,5 +61,5 @@ module.exports = (grunt) => {
 
   });
 
-  grunt.registerTask('default', ['clean', 'copy:src_to_dist', 'copy:pluginDef', 'copy:img_to_dist', 'babel']);
+  grunt.registerTask('default', ['clean', 'copy:src_to_dist', 'copy:bower_components_to_dist', 'copy:pluginDef', 'copy:img_to_dist', 'babel']);
 };

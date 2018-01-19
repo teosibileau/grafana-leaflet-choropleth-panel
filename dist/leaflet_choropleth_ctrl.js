@@ -1,9 +1,9 @@
 'use strict';
 
-System.register(['app/plugins/sdk', 'moment', 'lodash', 'jquery'], function (_export, _context) {
+System.register(['app/plugins/sdk', 'moment', 'lodash', 'jquery', './map_renderer'], function (_export, _context) {
   "use strict";
 
-  var PanelCtrl, moment, _, $, _createClass, panelDefaults, LeafletChoroplethCtrl;
+  var PanelCtrl, moment, _, $, mapRenderer, _createClass, panelDefaults, LeafletChoroplethCtrl;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -44,6 +44,8 @@ System.register(['app/plugins/sdk', 'moment', 'lodash', 'jquery'], function (_ex
       _ = _lodash.default;
     }, function (_jquery) {
       $ = _jquery.default;
+    }, function (_map_renderer) {
+      mapRenderer = _map_renderer.default;
     }],
     execute: function () {
       _createClass = function () {
@@ -65,9 +67,15 @@ System.register(['app/plugins/sdk', 'moment', 'lodash', 'jquery'], function (_ex
       }();
 
       panelDefaults = {
-        polygonsHotColor: "rgb(255, 0, 0)",
-        polygonsColdColor: "rgb(0, 0, 255)",
-        polygonsEndpoint: null
+        polygons: {
+          hotColor: "rgb(255, 0, 0)",
+          coldColor: "rgb(0, 0, 255)",
+          endpoint: null
+        },
+        mapping: {
+          height: 700,
+          initialZoom: 1
+        }
       };
 
       _export('LeafletChoroplethCtrl', LeafletChoroplethCtrl = function (_PanelCtrl) {
@@ -79,28 +87,54 @@ System.register(['app/plugins/sdk', 'moment', 'lodash', 'jquery'], function (_ex
           var _this = _possibleConstructorReturn(this, (LeafletChoroplethCtrl.__proto__ || Object.getPrototypeOf(LeafletChoroplethCtrl)).call(this, $scope, $injector));
 
           _.defaultsDeep(_this.panel, panelDefaults);
+          _this.panel.mapping.id = 'mapid_' + _this.panel.id;
           _this.events.on('init-edit-mode', _this.onInitEditMode.bind(_this));
           // this.events.on('data-received', this.onDataReceived.bind(this));
           // this.events.on('data-error', this.onDataError.bind(this));
           // this.events.on('data-snapshot-load', this.onDataReceived.bind(this));
-          _this.updateMap();
+          // this.events.on('render', this.onRender.bind(this));
+          _this.events.on('panel-teardown', _this.onPanelTeardown.bind(_this));
+          _this.fetchPolygons();
           return _this;
         }
 
         _createClass(LeafletChoroplethCtrl, [{
-          key: 'updateMap',
-          value: function updateMap() {
-            var _this2 = this;
-
-            this.time = moment().format('hh:mm:ss');
-            this.$timeout(function () {
-              _this2.updateMap();
-            }, 1000);
+          key: 'fetchPolygons',
+          value: function fetchPolygons() {
+            if (this.panel.polygons.endpoint) {
+              var that = this;
+              window.$.ajax({
+                url: that.panel.polygons.endpoint,
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json",
+                crossDomain: true,
+                success: function success(response) {
+                  that.panel.mapping.polygons = response;
+                  if (that.map) {
+                    that.map.drawPolygons();
+                  }
+                },
+                error: function error(response) {
+                  console.log(response);
+                }
+              });
+            } else {
+              console.log('endpoint is not set');
+            }
+          }
+        }, {
+          key: 'redrawPolygons',
+          value: function redrawPolygons() {
+            if (this.polygons) {
+              this.map;
+              console.log(this.polygons);
+            }
           }
         }, {
           key: 'onInitEditMode',
           value: function onInitEditMode() {
-            this.addEditorTab('Polygon Options', 'public/plugins/leaflet-choropleth-panel/editor.html', 2);
+            this.addEditorTab('Polygons Options', 'public/plugins/leaflet-choropleth-panel/polygons_editor.html', 2);
           }
         }, {
           key: 'onDataReceived',
@@ -109,6 +143,16 @@ System.register(['app/plugins/sdk', 'moment', 'lodash', 'jquery'], function (_ex
           key: 'onDataError',
           value: function onDataError(err) {
             this.onDataReceived([]);
+          }
+        }, {
+          key: 'onPanelTeardown',
+          value: function onPanelTeardown() {
+            if (this.map) this.map.remove();
+          }
+        }, {
+          key: 'link',
+          value: function link(scope, elem, attrs, ctrl) {
+            mapRenderer(scope, elem, attrs, ctrl);
           }
         }]);
 
