@@ -1,9 +1,9 @@
 'use strict';
 
-System.register(['lodash', './external/leaflet/dist/leaflet', './external/leaflet-map-zoomToGeometries/dist/leaflet.map.zoomToGeometries.min'], function (_export, _context) {
+System.register(['lodash', './external/leaflet/dist/leaflet', './external/leaflet-map-zoomToGeometries/dist/leaflet.map.zoomToGeometries.min', './external/chroma-js/chroma.min.js'], function (_export, _context) {
   "use strict";
 
-  var _, L, _createClass, ChoroplethMap;
+  var _, chroma, _createClass, ChoroplethMap;
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -14,9 +14,9 @@ System.register(['lodash', './external/leaflet/dist/leaflet', './external/leafle
   return {
     setters: [function (_lodash) {
       _ = _lodash.default;
-    }, function (_externalLeafletDistLeaflet) {
-      L = _externalLeafletDistLeaflet;
-    }, function (_externalLeafletMapZoomToGeometriesDistLeafletMapZoomToGeometriesMin) {}],
+    }, function (_externalLeafletDistLeaflet) {}, function (_externalLeafletMapZoomToGeometriesDistLeafletMapZoomToGeometriesMin) {}, function (_externalChromaJsChromaMinJs) {
+      chroma = _externalChromaJsChromaMinJs;
+    }],
     execute: function () {
       _createClass = function () {
         function defineProperties(target, props) {
@@ -52,16 +52,15 @@ System.register(['lodash', './external/leaflet/dist/leaflet', './external/leafle
           value: function createMap() {
             console.log('initializing map');
             this.map = new window.L.GeoJSONBoundedMap(this.mapContainer);
-            // this.map.fitWorld();
             this.map.zoomIn(this.ctrl.panel.mapping.initialZoom);
             this.map.scrollWheelZoom.disable();
 
-            window.L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
-              // maxZoom: 18,
-              attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-              // reuseTiles: true,
-              // detectRetina: true
-            }).addTo(this.map);
+            this.tiles = window.L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+              attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+              reuseTiles: true,
+              detectRetina: true
+            });
+            this.tiles.addTo(this.map);
           }
         }, {
           key: 'resize',
@@ -69,23 +68,68 @@ System.register(['lodash', './external/leaflet/dist/leaflet', './external/leafle
             this.map.invalidateSize();
           }
         }, {
-          key: 'panToMapCenter',
-          value: function panToMapCenter() {
-            // this.map.panTo([parseFloat(this.ctrl.panel.mapCenterLatitude), parseFloat(this.ctrl.panel.mapCenterLongitude)]);
-            // this.ctrl.mapCenterMoved = false;
-          }
-        }, {
-          key: 'setZoom',
-          value: function setZoom(zoomFactor) {
-            // this.map.setZoom(parseInt(zoomFactor, 10));
-          }
-        }, {
           key: 'drawPolygons',
           value: function drawPolygons() {
             if (this.ctrl.panel.mapping.polygons) {
-              this.geojson = window.L.geoJSON(this.ctrl.panel.mapping.polygons);
-              this.geojson.addTo(this.map);
-              if (typeof this.map.zoomToGeometries === "function") {
+              var that = this;
+
+              this.map.eachLayer(function (layer) {
+                if (layer != that.tiles) {
+                  that.map.removeLayer(layer);
+                }
+              });
+
+              var opts = {
+                scale: [this.ctrl.panel.polygons.coldColor, this.ctrl.panel.polygons.hotColor],
+                steps: 10, // number of breaks or steps in range
+                mode: 'q', // q for quantile, e for equidistant, k for k-means
+                style: {
+                  color: '#fff',
+                  weight: 1,
+                  fillOpacity: .8
+                }
+              };
+
+              var geojson = _.clone(this.ctrl.panel.mapping.polygons);
+
+              var features = [];
+              $.each(geojson.features, function (i, v) {
+                if (v.properties['choropleth'] > 0) {
+                  features.push(v);
+                }
+              });
+              geojson.features = features;
+
+              var values = _.map(geojson.features, function (item) {
+                return item.properties['choropleth'];
+              });
+
+              var limits = chroma.limits(values, opts.mode, opts.steps - 1);
+              var colors = chroma.scale(opts.scale).colors(limits.length);
+
+              if (geojson.features.length > 0) {
+                this.geojson = window.L.geoJSON(geojson, {
+                  limits: limits,
+                  colors: colors,
+                  style: function style(feature) {
+                    var style = {};
+                    var featureValue = feature.properties['choropleth'];
+                    for (var i = 0; i < limits.length; i++) {
+                      style.color = '#fff';
+                      style.weight = 1;
+                      style.fillOpacity = .5;
+                      if (featureValue <= limits[i]) {
+                        style.fillColor = colors[i];
+                        break;
+                      }
+                    }
+                    return style;
+                  }
+                });
+
+                if (this.map) {
+                  this.geojson.addTo(this.map);
+                }
                 this.map.zoomToGeometries(this.geojson);
               }
             }
@@ -93,9 +137,6 @@ System.register(['lodash', './external/leaflet/dist/leaflet', './external/leafle
         }, {
           key: 'remove',
           value: function remove() {
-            // this.circles = [];
-            // if (this.circlesLayer) this.removeCircles();
-            // if (this.legend) this.removeLegend();
             this.map.remove();
           }
         }]);

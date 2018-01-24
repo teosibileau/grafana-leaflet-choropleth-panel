@@ -1,7 +1,7 @@
 {
   "type": "panel",
-  "name": "Leaflet Heatmap",
-  "id": "leaflet-choropleth-panel",
+  "name": "Grafana Leaflet Choropleth",
+  "id": "grafana-leaflet-choropleth-panel",
 
   "info": {
     "description": "Leaflet choropleth for grafana",

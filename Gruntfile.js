@@ -18,7 +18,7 @@ module.exports = (grunt) => {
       bower_components_to_dist: {
         cwd: 'bower_components',
         expand: true,
-        src: ['**/dist/*.js', '**/dist/*.css'],
+        src: ['**/dist/*.js', '**/dist/*.css', 'chroma-js/chroma.min.js'],
         dest: 'dist/external'
       },
       pluginDef: {

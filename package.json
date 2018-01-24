@@ -1,5 +1,5 @@
 {
-  "name": "leaflet-choropleth-panel",
+  "name": "grafana-leaflet-choropleth-panel",
   "version": "1.0.0",
   "description": "Leaflet Choropleth Plugin for Grafana",
   "main": "src/module.js",

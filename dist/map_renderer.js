@@ -22,11 +22,6 @@ System.register(['./external/leaflet/dist/leaflet.css!', './map'], function (_ex
       }
       ctrl.map.resize();
       ctrl.map.drawPolygons();
-      // if (ctrl.mapCenterMoved) ctrl.map.panToMapCenter();
-
-      // if (!ctrl.map.legend && ctrl.panel.showLegend) ctrl.map.createLegend();
-
-      // ctrl.map.drawCircles();
     }
   }
 
