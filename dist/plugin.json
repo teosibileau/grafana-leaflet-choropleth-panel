@@ -1,0 +1,21 @@
+{
+  "type": "panel",
+  "name": "Grafana Leaflet Choropleth",
+  "id": "grafana-leaflet-choropleth-panel",
+
+  "info": {
+    "description": "Leaflet choropleth for grafana",
+    "author": {
+      "name": "Teofilo Sibileau",
+      "url": "https://github.com/drkloc"
+    },
+    "keywords": ["leaflet", "choropleth", "panel"],
+    "version": "0.0.1",
+    "updated": "2017-01-01"
+  },
+
+  "dependencies": {
+    "grafanaVersion": "3.x.x",
+    "plugins": [ ]
+  }
+}

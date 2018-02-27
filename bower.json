@@ -1,0 +1,29 @@
+{
+  "name": "grafana-leaflet-choropleth-panel",
+  "description": "Leaflet Choropleth Plugin for Grafana",
+  "main": "src/module.js",
+  "authors": [
+    "Teofilo Sibileau"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "leaflet",
+    "choropleth",
+    "grafana",
+    "plugin",
+    "panel"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "chroma-js": ">=1.3.5",
+    "leaflet": ">=1.0",
+    "leaflet-map-zoomToGeometries": "https://github.com/drkloc/leaflet.map.zoomToGeometries.js.git"
+  }
+}
