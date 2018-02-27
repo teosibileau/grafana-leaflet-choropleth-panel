@@ -1,0 +1,1 @@
+# grafana-leaflet-choropleth-panel
