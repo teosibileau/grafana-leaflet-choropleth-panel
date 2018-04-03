@@ -1,0 +1,62 @@
+ahoyapi: v2
+commands:
+  stop:
+    cmd: "ahoy docker compose stop $@"
+    usage: Stop the docker-compose containers (non-destructive).
+  ps:
+    cmd: "ahoy docker compose ps"
+    usage: List the running docker-compose containers.
+  reset:
+    cmd: "ahoy docker compose stop $@ && ahoy docker compose rm $@ && ahoy docker compose up -d $@"
+    usage: Destroy and then restart the docker compose containers.
+  destroy:
+    cmd: "ahoy docker compose stop $@ && ahoy docker compose rm $@"
+    usage: Destroy all the docker compose containers. (use before deleting folder)
+  exec:
+    cmd: |
+      first_arg=$(echo "$@" | sed  's/\([[:alnum:]]*\ \).*/\1/')
+      rest_args=$(echo "$@" | sed  's/\([[:alnum:]]*\ \)//')
+      container=$first_arg
+      args=" $rest_args"
+      id=$(ahoy docker compose ps -q $container)
+
+      if [ -t 0 ]; then
+        # if the input is empty, then use a tty session
+        docker exec -it $id bash -c "$command $args"
+      else
+        # if the input is not empty, then don't use tty
+        docker exec -i $id bash -c "$command $args"
+      fi
+    usage: execute a command in a running container
+  run:
+    usage: Docker run
+    cmd: |
+      ahoy docker compose run $@
+  up:
+    cmd: "ahoy docker compose up -d $@"
+    usage: Start the docker-compose containers.
+  build:
+    cmd: "ahoy docker compose build $@"
+    usage: Builds buildable docker-compose containers
+  compose:
+    usage: Abstraction for docker-compose
+    cmd: |
+      docker-compose -f docker-compose.yml $COMPOSE_FLAGS -p "${PWD##*/}" $@
+  cleanup:
+    usage: Clean ups docker unused images and volumes. See http://blog.yohanliyanage.com/2015/05/docker-clean-up-after-yourself/.
+    cmd: |
+      EXITED=`docker ps -a -q -f status=exited`
+      DANGLING=`docker images -f "dangling=true" -q`
+      if [ ! -z "$EXITED" ]
+      then
+        docker rm -v $EXITED
+      fi
+      if [ ! -z "$DANGLING" ]
+      then
+        docker rmi $DANGLING
+      fi
+      docker run -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/docker:/var/lib/docker --rm martin/docker-cleanup-volumes
+  log:
+    usage: bring ups logs for containers
+    cmd: |
+      ahoy docker compose logs --follow $@
