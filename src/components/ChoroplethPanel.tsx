@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useMemo } from 'react';
 import { PanelProps, DataFrame } from '@grafana/data';
 import { ChoroplethOptions } from '../types';
 import { ChoroplethMap } from './ChoroplethMap';
-import { useGeoJSON } from './useGeoJSON';
 import type { FeatureCollection } from 'geojson';
 
 import 'leaflet/dist/leaflet.css';
@@ -65,7 +64,7 @@ export function mapDataToFeatures(
 export const ChoroplethPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<ChoroplethMap | null>(null);
-  const { geojson, loading, error } = useGeoJSON(options.endpoint);
+  const geojson = options.geoJsonData;
 
   // Create/destroy map on mount/unmount
   useEffect(() => {
@@ -91,7 +90,7 @@ export const ChoroplethPanel: React.FC<Props> = ({ options, data, width, height 
     if (!geojson) {
       return null;
     }
-    // Deep clone to avoid mutating the cached geojson
+    // Deep clone to avoid mutating the stored geojson
     const clone: FeatureCollection = JSON.parse(JSON.stringify(geojson));
     return mapDataToFeatures(data.series, clone, options.geoJsonKey, options.dataSourceTag);
   }, [geojson, data.series, options.geoJsonKey, options.dataSourceTag]);
@@ -102,18 +101,10 @@ export const ChoroplethPanel: React.FC<Props> = ({ options, data, width, height 
     }
   }, [mappedGeoJson, options.coldColor, options.hotColor]);
 
-  if (loading) {
+  if (!geojson) {
     return (
       <div style={{ width, height, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        Loading GeoJSON...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div style={{ width, height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'red' }}>
-        Error: {error}
+        No GeoJSON data configured. Use the panel editor to fetch GeoJSON from a URL.
       </div>
     );
   }

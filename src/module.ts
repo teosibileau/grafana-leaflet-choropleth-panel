@@ -1,14 +1,17 @@
 import { PanelPlugin } from '@grafana/data';
 import { ChoroplethOptions } from './types';
 import { ChoroplethPanel } from './components/ChoroplethPanel';
+import { GeoJsonEditor } from './components/GeoJsonEditor';
 
 export const plugin = new PanelPlugin<ChoroplethOptions>(ChoroplethPanel).setPanelOptions((builder) => {
   builder
-    .addTextInput({
-      path: 'endpoint',
-      name: 'GeoJSON Endpoint',
-      description: 'URL to fetch GeoJSON data from',
-      defaultValue: '',
+    .addCustomEditor({
+      id: 'geoJsonData',
+      path: 'geoJsonData',
+      name: 'GeoJSON Data',
+      description: 'Stored GeoJSON for the choropleth layer',
+      editor: GeoJsonEditor,
+      defaultValue: null,
     })
     .addColorPicker({
       path: 'hotColor',

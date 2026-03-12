@@ -1,6 +1,8 @@
+import type { FeatureCollection } from 'geojson';
+
 export interface ChoroplethOptions {
-  /** GeoJSON endpoint URL */
-  endpoint: string;
+  /** Stored GeoJSON data */
+  geoJsonData: FeatureCollection | null;
   /** Max value color (hex) */
   hotColor: string;
   /** Min value color (hex) */
