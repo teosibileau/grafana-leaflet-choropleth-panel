@@ -12,7 +12,7 @@ services:
       - 3000:3000/tcp
     volumes:
       - ./dist:/var/lib/grafana/plugins/teosibileau-leafletchoropleth-panel
-      - ./provisioning:/etc/grafana/provisioning
+      - ./.docker/provisioning:/etc/grafana/provisioning
       - .:/root/teosibileau-leafletchoropleth-panel
 
     environment:
