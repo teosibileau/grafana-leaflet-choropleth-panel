@@ -2,6 +2,7 @@ import { PanelPlugin } from '@grafana/data';
 import { ChoroplethOptions } from './types';
 import { ChoroplethPanel } from './components/ChoroplethPanel';
 import { GeoJsonEditor } from './components/GeoJsonEditor';
+import { GeoJsonKeyEditor } from './components/GeoJsonKeyEditor';
 
 export const plugin = new PanelPlugin<ChoroplethOptions>(ChoroplethPanel).setPanelOptions((builder) => {
   builder
@@ -25,10 +26,12 @@ export const plugin = new PanelPlugin<ChoroplethOptions>(ChoroplethPanel).setPan
       description: 'Color for minimum values',
       defaultValue: '#0000ff',
     })
-    .addTextInput({
+    .addCustomEditor({
+      id: 'geoJsonKey',
       path: 'geoJsonKey',
       name: 'GeoJSON Key',
       description: 'GeoJSON feature property name used to match metric series',
+      editor: GeoJsonKeyEditor,
       defaultValue: '',
     })
     .addTextInput({
