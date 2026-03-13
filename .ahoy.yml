@@ -5,3 +5,11 @@ commands:
     usage: Lists available commands
     imports:
       - .ahoy/docker.ahoy.yml
+
+  reset-influx:
+    usage: Resets the InfluxDB database
+    cmd: |
+      ahoy docker stop influxdb
+      ahoy docker destroy influxdb
+      VOL=$(docker-compose volumes | grep influxdb-data | awk '{print $2}') && [ -n "$VOL" ] && docker volume rm $VOL || true
+      ahoy docker up influxdb
