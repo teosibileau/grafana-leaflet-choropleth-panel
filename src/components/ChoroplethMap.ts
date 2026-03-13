@@ -23,7 +23,7 @@ export class ChoroplethMap {
     this.tiles.addTo(this.map);
   }
 
-  drawPolygons(geojson: FeatureCollection, coldColor: string, hotColor: string): void {
+  drawPolygons(geojson: FeatureCollection, coldColor: string, hotColor: string, geoJsonKey: string): void {
     // Remove previous GeoJSON layer
     if (this.geojsonLayer) {
       this.map.removeLayer(this.geojsonLayer);
@@ -63,6 +63,11 @@ export class ChoroplethMap {
           fillOpacity: 0.5,
           fillColor,
         };
+      },
+      onEachFeature: (feature, layer) => {
+        const name = feature.properties?.[geoJsonKey] ?? 'Unknown';
+        const value = feature.properties?.choropleth ?? 0;
+        layer.bindTooltip(`${name}: ${value}`, { sticky: true });
       },
     });
 

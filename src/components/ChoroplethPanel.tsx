@@ -101,9 +101,9 @@ export const ChoroplethPanel: React.FC<Props> = ({ options, data, width, height 
 
   useEffect(() => {
     if (mapRef.current && mappedGeoJson) {
-      mapRef.current.drawPolygons(mappedGeoJson, coldColor, hotColor);
+      mapRef.current.drawPolygons(mappedGeoJson, coldColor, hotColor, options.geoJsonKey);
     }
-  }, [mappedGeoJson, coldColor, hotColor]);
+  }, [mappedGeoJson, coldColor, hotColor, options.geoJsonKey]);
 
   if (!geojson) {
     return (
