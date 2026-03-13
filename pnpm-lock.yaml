@@ -63,6 +63,9 @@ importers:
       '@types/chroma-js':
         specifier: ^2.4.0
         version: 2.4.5
+      '@types/geojson':
+        specifier: ^7946.0.16
+        version: 7946.0.16
       '@types/jest':
         specifier: ^29.5.0
         version: 29.5.14
