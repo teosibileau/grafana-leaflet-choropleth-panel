@@ -22,16 +22,16 @@
   "panels": [
     {
       "datasource": {
-        "type": "grafana-testdata-datasource",
-        "uid": "trlxrdZVk"
+        "type": "influxdb",
+        "uid": "influxdb-rio-negro"
       },
       "fieldConfig": {
         "defaults": {},
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 12,
+        "w": 24,
         "x": 0,
         "y": 0
       },
@@ -2015,7 +2015,7 @@
               },
               "properties": {
                 "cabecera": "NORQUINCO",
-                "departamento": "ÑORQUINCO",
+                "departamento": "\u00d1ORQUINCO",
                 "id": 371,
                 "provincia": "RIO NEGRO"
               },
@@ -15437,51 +15437,61 @@
       "targets": [
         {
           "datasource": {
-            "type": "grafana-testdata-datasource",
-            "uid": "db84e60d-b92a-4089-82cb-34842fb1754b"
+            "type": "influxdb",
+            "uid": "influxdb-rio-negro"
           },
-          "rawFrameContent": "[\n  {\n    \"name\": \"metric{departamento=CONESA}\",\n    \"columns\": [\n      {\n        \"text\": \"Time\",\n        \"type\": \"time\"\n      },\n      {\n        \"text\": \"Value\",\n        \"type\": \"number\"\n      }\n    ],\n    \"rows\": [\n      [1609459200000, 42]\n    ]\n  },\n  {\n    \"name\": \"metric{departamento=VALCHETA}\",\n    \"columns\": [\n      {\n        \"text\": \"Time\",\n        \"type\": \"time\"\n      },\n      {\n        \"text\": \"Value\",\n        \"type\": \"number\"\n      }\n    ],\n    \"rows\": [\n      [1609459200000, 78]\n    ]\n  },\n  {\n    \"name\": \"metric{departamento=SAN ANTONIO}\",\n    \"columns\": [\n      {\n        \"text\": \"Time\",\n        \"type\": \"time\"\n      },\n      {\n        \"text\": \"Value\",\n        \"type\": \"number\"\n      }\n    ],\n    \"rows\": [\n      [1609459200000, 15]\n    ]\n  }\n]",
           "refId": "A",
-          "scenarioId": "raw_frame"
+          "query": "SELECT last(\"value\") FROM \"metric\" WHERE $timeFilter GROUP BY time(1h), \"departamento\" fill(none)",
+          "rawQuery": true,
+          "resultFormat": "time_series"
         }
       ],
       "title": "Sample Panel Title",
       "type": "teosibileau-leafletchoropleth-panel"
     },
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 3,
+      "title": "Aggregated Data",
+      "type": "row"
+    },
+    {
       "datasource": {
-        "type": "grafana-testdata-datasource",
-        "uid": "trlxrdZVk"
+        "type": "influxdb",
+        "uid": "influxdb-rio-negro"
       },
       "fieldConfig": {
         "defaults": {},
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 0
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 13
       },
-      "id": 2,
-      "options": {
-        "seriesCountSize": "sm",
-        "showSeriesCount": false,
-        "text": "Default value of text input option"
-      },
+      "id": 4,
+      "options": {},
       "targets": [
         {
-          "alias": "",
           "datasource": {
-            "type": "grafana-testdata-datasource",
-            "uid": "db84e60d-b92a-4089-82cb-34842fb1754b"
+            "type": "influxdb",
+            "uid": "influxdb-rio-negro"
           },
           "refId": "A",
-          "scenarioId": "no_data_points"
+          "query": "SELECT last(\"value\") FROM \"metric\" WHERE $timeFilter GROUP BY \"departamento\" fill(none)",
+          "rawQuery": true,
+          "resultFormat": "table"
         }
       ],
-      "title": "Sample Panel Title",
-      "type": "teosibileau-leafletchoropleth-panel"
+      "title": "Data by Departamento",
+      "type": "table"
     }
   ],
   "preload": false,

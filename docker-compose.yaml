@@ -1,10 +1,21 @@
 services:
+  influxdb:
+    image: influxdb:1.8
+    container_name: 'teosibileau-influxdb'
+    ports:
+      - 8086:8086
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+      - ./.docker/influxdb:/docker-entrypoint-initdb.d
+    environment:
+      INFLUXDB_DB: rio_negro
+
   grafana:
     user: root
     container_name: 'teosibileau-leafletchoropleth-panel'
 
     build:
-      context: .docker
+      context: .docker/grafana
       args:
         grafana_image: ${GRAFANA_IMAGE:-grafana-enterprise}
         grafana_version: ${GRAFANA_VERSION:-12.4.0}
@@ -12,7 +23,7 @@ services:
       - 3000:3000/tcp
     volumes:
       - ./dist:/var/lib/grafana/plugins/teosibileau-leafletchoropleth-panel
-      - ./.docker/provisioning:/etc/grafana/provisioning
+      - ./.docker/grafana/provisioning:/etc/grafana/provisioning
       - .:/root/teosibileau-leafletchoropleth-panel
 
     environment:
@@ -25,3 +36,9 @@ services:
       GF_LOG_LEVEL: debug
       GF_DATAPROXY_LOGGING: 1
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: teosibileau-leafletchoropleth-panel
+
+    depends_on:
+      - influxdb
+
+volumes:
+  influxdb-data:

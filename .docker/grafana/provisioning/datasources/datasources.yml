@@ -1,0 +1,14 @@
+apiVersion: 1
+
+datasources:
+  - name: TestData DB
+    type: testdata
+    uid: trlxrdZVk
+
+  - name: InfluxDB Rio Negro
+    type: influxdb
+    uid: influxdb-rio-negro
+    access: proxy
+    url: http://influxdb:8086
+    database: rio_negro
+    isDefault: true
