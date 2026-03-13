@@ -34,15 +34,10 @@ export const plugin = new PanelPlugin<ChoroplethOptions>(ChoroplethPanel).setPan
       editor: GeoJsonKeyEditor,
       defaultValue: '',
     })
-    .addSliderInput({
-      path: 'initialZoom',
-      name: 'Initial Zoom',
-      description: 'Initial map zoom level',
-      defaultValue: 1,
-      settings: {
-        min: 1,
-        max: 18,
-        step: 1,
-      },
+    .addBooleanSwitch({
+      path: 'autoFitBounds',
+      name: 'Auto Fit Bounds',
+      description: 'Automatically fit the map to visible features when data refreshes',
+      defaultValue: true,
     });
 });

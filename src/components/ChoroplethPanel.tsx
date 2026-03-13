@@ -74,13 +74,12 @@ export const ChoroplethPanel: React.FC<Props> = ({ options, data, width, height 
     if (!containerRef.current) {
       return;
     }
-    mapRef.current = new ChoroplethMap(containerRef.current, options.initialZoom);
+    mapRef.current = new ChoroplethMap(containerRef.current);
     return () => {
       mapRef.current?.remove();
       mapRef.current = null;
     };
     // Only re-create map if the container mounts/unmounts
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Handle resize
@@ -100,9 +99,9 @@ export const ChoroplethPanel: React.FC<Props> = ({ options, data, width, height 
 
   useEffect(() => {
     if (mapRef.current && mappedGeoJson) {
-      mapRef.current.drawPolygons(mappedGeoJson, coldColor, hotColor, options.geoJsonKey);
+      mapRef.current.drawPolygons(mappedGeoJson, coldColor, hotColor, options.geoJsonKey, options.autoFitBounds);
     }
-  }, [mappedGeoJson, coldColor, hotColor, options.geoJsonKey]);
+  }, [mappedGeoJson, coldColor, hotColor, options.geoJsonKey, options.autoFitBounds]);
 
   if (!geojson) {
     return (

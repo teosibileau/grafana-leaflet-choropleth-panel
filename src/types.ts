@@ -9,6 +9,6 @@ export interface ChoroplethOptions {
   coldColor: string;
   /** GeoJSON property name for matching (also used to filter metric series by tag) */
   geoJsonKey: string;
-  /** Initial zoom level 1-18 */
-  initialZoom: number;
+  /** Automatically fit the map to visible features when data refreshes */
+  autoFitBounds: boolean;
 }

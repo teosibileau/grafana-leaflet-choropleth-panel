@@ -11,10 +11,10 @@ export class ChoroplethMap {
   private tiles: L.TileLayer;
   private geojsonLayer: L.GeoJSON | null = null;
 
-  constructor(container: HTMLDivElement, initialZoom: number) {
+  constructor(container: HTMLDivElement) {
     this.map = L.map(container, {
       scrollWheelZoom: false,
-    }).setView([0, 0], initialZoom);
+    }).setView([0, 0], 2);
 
     this.tiles = L.tileLayer(TILE_URL, {
       attribution: TILE_ATTRIBUTION,
@@ -23,7 +23,13 @@ export class ChoroplethMap {
     this.tiles.addTo(this.map);
   }
 
-  drawPolygons(geojson: FeatureCollection, coldColor: string, hotColor: string, geoJsonKey: string): void {
+  drawPolygons(
+    geojson: FeatureCollection,
+    coldColor: string,
+    hotColor: string,
+    geoJsonKey: string,
+    autoFitBounds: boolean
+  ): void {
     // Remove previous GeoJSON layer
     if (this.geojsonLayer) {
       this.map.removeLayer(this.geojsonLayer);
@@ -72,7 +78,9 @@ export class ChoroplethMap {
     });
 
     this.geojsonLayer.addTo(this.map);
-    this.map.fitBounds(this.geojsonLayer.getBounds());
+    if (autoFitBounds) {
+      this.map.fitBounds(this.geojsonLayer.getBounds());
+    }
   }
 
   resize(): void {
