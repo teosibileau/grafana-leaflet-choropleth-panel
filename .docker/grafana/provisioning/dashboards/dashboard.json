@@ -30,14 +30,14 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 12,
+        "h": 22,
         "w": 24,
         "x": 0,
         "y": 0
       },
       "id": 1,
       "options": {
-        "coldColor": "#0000ff",
+        "coldColor": "dark-purple",
         "dataSourceTag": "departamento",
         "geoJsonData": {
           "features": [
@@ -66,8 +66,8 @@
                     [-65.241, -39.8622],
                     [-65.2457, -39.8659],
                     [-65.2455, -39.8507],
-                    [-65.0, -39.8586],
-                    [-64.0, -39.8708],
+                    [-65, -39.8586],
+                    [-64, -39.8708],
                     [-63.6438, -39.8715]
                   ]
                 ],
@@ -564,7 +564,7 @@
                   [
                     [-69.7553, -41.5052],
                     [-69.3895, -42.0001],
-                    [-71.1749, -42.0],
+                    [-71.1749, -42],
                     [-71.2401, -41.954],
                     [-71.2258, -41.8558],
                     [-71.3064, -41.8209],
@@ -584,7 +584,7 @@
               },
               "properties": {
                 "cabecera": "NORQUINCO",
-                "departamento": "\u00d1ORQUINCO",
+                "departamento": "ÑORQUINCO",
                 "id": 371,
                 "provincia": "RIO NEGRO"
               },
@@ -1298,8 +1298,8 @@
                     [-63.3846, -39.3291],
                     [-63.3835, -39.3285],
                     [-63.3819, -39.8719],
-                    [-64.0, -39.8708],
-                    [-65.0, -39.8586],
+                    [-64, -39.8708],
+                    [-65, -39.8586],
                     [-65.2455, -39.8507],
                     [-65.2232, -39.0165],
                     [-65.2161, -38.838],
@@ -1875,7 +1875,7 @@
                     [-71.3064, -41.8209],
                     [-71.2258, -41.8558],
                     [-71.2401, -41.954],
-                    [-71.1749, -42.0],
+                    [-71.1749, -42],
                     [-71.7732, -41.9999],
                     [-71.7766, -41.996],
                     [-71.7796, -41.9833],
@@ -2999,7 +2999,7 @@
           "type": "FeatureCollection"
         },
         "geoJsonKey": "departamento",
-        "hotColor": "#ff0000",
+        "hotColor": "yellow",
         "initialZoom": 1,
         "seriesCountSize": "sm",
         "showSeriesCount": false,
@@ -3012,9 +3012,9 @@
             "type": "influxdb",
             "uid": "influxdb-rio-negro"
           },
-          "refId": "A",
           "query": "SELECT last(\"value\") FROM \"metric\" WHERE $timeFilter GROUP BY time(1h), \"departamento\" fill(none)",
           "rawQuery": true,
+          "refId": "A",
           "resultFormat": "time_series"
         }
       ],
@@ -3027,9 +3027,10 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 12
+        "y": 22
       },
       "id": 3,
+      "panels": [],
       "title": "Aggregated Data",
       "type": "row"
     },
@@ -3039,26 +3040,55 @@
         "uid": "influxdb-rio-negro"
       },
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
         "overrides": []
       },
       "gridPos": {
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 13
+        "y": 23
       },
       "id": 4,
-      "options": {},
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "pluginVersion": "12.4.0",
       "targets": [
         {
           "datasource": {
             "type": "influxdb",
             "uid": "influxdb-rio-negro"
           },
-          "refId": "A",
           "query": "SELECT last(\"value\") FROM \"metric\" WHERE $timeFilter GROUP BY \"departamento\" fill(none)",
           "rawQuery": true,
+          "refId": "A",
           "resultFormat": "table"
         }
       ],
