@@ -10,14 +10,13 @@ import 'leaflet/dist/leaflet.css';
 interface Props extends PanelProps<ChoroplethOptions> {}
 
 /**
- * Maps Grafana data series to GeoJSON features by matching the dataSourceTag
- * in the series name to GeoJSON feature properties keyed by geoJsonKey.
+ * Maps Grafana data series to GeoJSON features by matching the geoJsonKey
+ * tag in the series name to GeoJSON feature property values.
  */
 export function mapDataToFeatures(
   series: DataFrame[],
   geojson: FeatureCollection,
-  geoJsonKey: string,
-  dataSourceTag: string
+  geoJsonKey: string
 ): FeatureCollection {
   // Reset all choropleth values
   for (const feature of geojson.features) {
@@ -26,7 +25,7 @@ export function mapDataToFeatures(
     }
   }
 
-  if (!geoJsonKey || !dataSourceTag) {
+  if (!geoJsonKey) {
     return geojson;
   }
 
@@ -39,7 +38,7 @@ export function mapDataToFeatures(
     }
     const target = name.substring(braceIdx);
 
-    if (target.indexOf(dataSourceTag) === -1) {
+    if (target.indexOf(geoJsonKey) === -1) {
       continue;
     }
 
@@ -96,8 +95,8 @@ export const ChoroplethPanel: React.FC<Props> = ({ options, data, width, height 
     }
     // Deep clone to avoid mutating the stored geojson
     const clone: FeatureCollection = JSON.parse(JSON.stringify(geojson));
-    return mapDataToFeatures(data.series, clone, options.geoJsonKey, options.dataSourceTag);
-  }, [geojson, data.series, options.geoJsonKey, options.dataSourceTag]);
+    return mapDataToFeatures(data.series, clone, options.geoJsonKey);
+  }, [geojson, data.series, options.geoJsonKey]);
 
   useEffect(() => {
     if (mapRef.current && mappedGeoJson) {

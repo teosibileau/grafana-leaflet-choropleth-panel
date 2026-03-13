@@ -19,14 +19,14 @@ describe('mapDataToFeatures', () => {
 
     const series = [
       toDataFrame({
-        name: 'metric{host=region-a}',
+        name: 'metric{name=region-a}',
         fields: [
           { name: 'time', type: FieldType.time, values: [1000] },
           { name: 'value', type: FieldType.number, values: [42] },
         ],
       }),
       toDataFrame({
-        name: 'metric{host=region-c}',
+        name: 'metric{name=region-c}',
         fields: [
           { name: 'time', type: FieldType.time, values: [1000] },
           { name: 'value', type: FieldType.number, values: [99] },
@@ -34,7 +34,7 @@ describe('mapDataToFeatures', () => {
       }),
     ];
 
-    const result = mapDataToFeatures(series, geojson, 'name', 'host');
+    const result = mapDataToFeatures(series, geojson, 'name');
 
     expect(result.features[0].properties!.choropleth).toBe(42);
     expect(result.features[1].properties!.choropleth).toBe(0);
@@ -45,7 +45,7 @@ describe('mapDataToFeatures', () => {
     const geojson = makeGeoJSON(['region-a']);
     const series = [
       toDataFrame({
-        name: 'metric{host=region-a}',
+        name: 'metric{name=region-a}',
         fields: [
           { name: 'time', type: FieldType.time, values: [1000] },
           { name: 'value', type: FieldType.number, values: [42] },
@@ -53,7 +53,7 @@ describe('mapDataToFeatures', () => {
       }),
     ];
 
-    const result = mapDataToFeatures(series, geojson, '', 'host');
+    const result = mapDataToFeatures(series, geojson, '');
     expect(result.features[0].properties!.choropleth).toBe(0);
   });
 
@@ -69,11 +69,11 @@ describe('mapDataToFeatures', () => {
       }),
     ];
 
-    const result = mapDataToFeatures(series, geojson, 'name', 'host');
+    const result = mapDataToFeatures(series, geojson, 'name');
     expect(result.features[0].properties!.choropleth).toBe(0);
   });
 
-  it('filters by dataSourceTag', () => {
+  it('filters by geoJsonKey tag', () => {
     const geojson = makeGeoJSON(['region-a']);
     const series = [
       toDataFrame({
@@ -85,7 +85,7 @@ describe('mapDataToFeatures', () => {
       }),
     ];
 
-    const result = mapDataToFeatures(series, geojson, 'name', 'host');
+    const result = mapDataToFeatures(series, geojson, 'name');
     expect(result.features[0].properties!.choropleth).toBe(0);
   });
 });

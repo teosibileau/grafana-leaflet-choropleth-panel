@@ -34,12 +34,6 @@ export const plugin = new PanelPlugin<ChoroplethOptions>(ChoroplethPanel).setPan
       editor: GeoJsonKeyEditor,
       defaultValue: '',
     })
-    .addTextInput({
-      path: 'dataSourceTag',
-      name: 'Data Source Tag',
-      description: 'Tag name to filter metric series',
-      defaultValue: '',
-    })
     .addSliderInput({
       path: 'initialZoom',
       name: 'Initial Zoom',
