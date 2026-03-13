@@ -1,6 +1,18 @@
-import { FieldType, toDataFrame } from '@grafana/data';
-import { mapDataToFeatures } from './ChoroplethPanel';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { FieldType, LoadingState, toDataFrame } from '@grafana/data';
+import { mapDataToFeatures, ChoroplethPanel } from './ChoroplethPanel';
+import type { ChoroplethOptions } from '../types';
 import type { FeatureCollection } from 'geojson';
+
+// Mock ChoroplethMap to avoid Leaflet Canvas issues in jsdom
+jest.mock('./ChoroplethMap', () => ({
+  ChoroplethMap: jest.fn().mockImplementation(() => ({
+    remove: jest.fn(),
+    resize: jest.fn(),
+    drawPolygons: jest.fn(),
+  })),
+}));
 
 function makeGeoJSON(keys: string[]): FeatureCollection {
   return {
@@ -87,5 +99,48 @@ describe('mapDataToFeatures', () => {
 
     const result = mapDataToFeatures(series, geojson, 'name');
     expect(result.features[0].properties!.choropleth).toBe(0);
+  });
+});
+
+describe('ChoroplethPanel', () => {
+  const defaultProps = {
+    id: 1,
+    data: { series: [], state: LoadingState.Done, timeRange: {} as any, structureRev: 0 },
+    timeRange: {} as any,
+    timeZone: 'utc' as const,
+    options: {
+      geoJsonData: null,
+      hotColor: 'red',
+      coldColor: 'blue',
+      geoJsonKey: 'name',
+      autoFitBounds: true,
+      strokeColor: '#000',
+      strokeWidth: 1,
+      fillOpacity: 0.8,
+    } as ChoroplethOptions,
+    transparent: false,
+    width: 400,
+    height: 300,
+    fieldConfig: { defaults: {}, overrides: [] } as any,
+    renderCounter: 0,
+    title: 'Test',
+    eventBus: {
+      subscribe: jest.fn(),
+      getStream: jest.fn(),
+      publish: jest.fn(),
+      removeAllListeners: jest.fn(),
+      newScopedBus: jest.fn(),
+    } as any,
+    onOptionsChange: jest.fn(),
+    onFieldConfigChange: jest.fn(),
+    replaceVariables: ((s: string) => s) as any,
+    onChangeTimeRange: jest.fn(),
+  };
+
+  it('shows fallback message when no GeoJSON is configured', () => {
+    render(<ChoroplethPanel {...defaultProps} />);
+    expect(
+      screen.getByText('No GeoJSON data configured. Use the panel editor to fetch GeoJSON from a URL.')
+    ).toBeInTheDocument();
   });
 });
