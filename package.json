@@ -9,9 +9,9 @@
     "test:ci": "jest --passWithNoTests --maxWorkers 4",
     "typecheck": "tsc --noEmit",
     "lint": "eslint --cache .",
-    "lint:fix": "npm run lint -- --fix && prettier --write --list-different .",
+    "lint:fix": "pnpm lint -- --fix && prettier --write --list-different .",
     "server": "docker compose up --build",
-    "sign": "npx --yes @grafana/sign-plugin@latest",
+    "sign": "pnpm dlx @grafana/sign-plugin@latest",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -88,5 +88,5 @@
     "react": "^18.3.0",
     "react-dom": "^18.3.0"
   },
-  "packageManager": "npm@11.6.2"
+  "packageManager": "pnpm@9.15.9"
 }
