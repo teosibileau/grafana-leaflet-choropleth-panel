@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useMemo } from 'react';
 import { PanelProps, DataFrame } from '@grafana/data';
+import { useTheme2 } from '@grafana/ui';
 import { ChoroplethOptions } from '../types';
 import { ChoroplethMap } from './ChoroplethMap';
 import type { FeatureCollection } from 'geojson';
@@ -64,7 +65,10 @@ export function mapDataToFeatures(
 export const ChoroplethPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<ChoroplethMap | null>(null);
+  const theme = useTheme2();
   const geojson = options.geoJsonData;
+  const coldColor = theme.visualization.getColorByName(options.coldColor);
+  const hotColor = theme.visualization.getColorByName(options.hotColor);
 
   // Create/destroy map on mount/unmount
   useEffect(() => {
@@ -97,9 +101,9 @@ export const ChoroplethPanel: React.FC<Props> = ({ options, data, width, height 
 
   useEffect(() => {
     if (mapRef.current && mappedGeoJson) {
-      mapRef.current.drawPolygons(mappedGeoJson, options.coldColor, options.hotColor);
+      mapRef.current.drawPolygons(mappedGeoJson, coldColor, hotColor);
     }
-  }, [mappedGeoJson, options.coldColor, options.hotColor]);
+  }, [mappedGeoJson, coldColor, hotColor]);
 
   if (!geojson) {
     return (
