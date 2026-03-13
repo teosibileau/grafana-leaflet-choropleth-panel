@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { StandardEditorProps } from '@grafana/data';
-import { Select } from '@grafana/ui';
+import { Combobox } from '@grafana/ui';
 import { ChoroplethOptions } from '../types';
 
 type Props = StandardEditorProps<string, any, ChoroplethOptions>;
@@ -25,13 +25,12 @@ export const GeoJsonKeyEditor: React.FC<Props> = ({ value, onChange, context }) 
   }, [context.options?.geoJsonData]);
 
   return (
-    <Select
+    <Combobox
       options={options}
-      value={value}
-      onChange={(v) => onChange(v.value)}
+      value={value ?? null}
+      onChange={(v) => onChange(v?.value ?? '')}
       placeholder={options.length ? 'Select a property key' : 'Load GeoJSON first'}
       isClearable
-      noOptionsMessage="No GeoJSON loaded"
     />
   );
 };
