@@ -68,6 +68,9 @@ export const ChoroplethPanel: React.FC<Props> = ({ options, data, width, height 
   const geojson = options.geoJsonData;
   const coldColor = theme.visualization.getColorByName(options.coldColor);
   const hotColor = theme.visualization.getColorByName(options.hotColor);
+  const strokeColor = theme.visualization.getColorByName(options.strokeColor);
+  const strokeWidth = options.strokeWidth;
+  const fillOpacity = options.fillOpacity;
 
   // Create/destroy map on mount/unmount
   useEffect(() => {
@@ -99,9 +102,22 @@ export const ChoroplethPanel: React.FC<Props> = ({ options, data, width, height 
 
   useEffect(() => {
     if (mapRef.current && mappedGeoJson) {
-      mapRef.current.drawPolygons(mappedGeoJson, coldColor, hotColor, options.geoJsonKey, options.autoFitBounds);
+      mapRef.current.drawPolygons(mappedGeoJson, coldColor, hotColor, options.geoJsonKey, options.autoFitBounds, {
+        strokeColor,
+        strokeWidth,
+        fillOpacity,
+      });
     }
-  }, [mappedGeoJson, coldColor, hotColor, options.geoJsonKey, options.autoFitBounds]);
+  }, [
+    mappedGeoJson,
+    coldColor,
+    hotColor,
+    options.geoJsonKey,
+    options.autoFitBounds,
+    strokeColor,
+    strokeWidth,
+    fillOpacity,
+  ]);
 
   if (!geojson) {
     return (

@@ -2,6 +2,12 @@ import L from 'leaflet';
 import chroma from 'chroma-js';
 import type { FeatureCollection } from 'geojson';
 
+export interface PolygonStyle {
+  strokeColor: string;
+  strokeWidth: number;
+  fillOpacity: number;
+}
+
 const TILE_URL = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
 const TILE_ATTRIBUTION =
   '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
@@ -28,7 +34,8 @@ export class ChoroplethMap {
     coldColor: string,
     hotColor: string,
     geoJsonKey: string,
-    autoFitBounds: boolean
+    autoFitBounds: boolean,
+    style: PolygonStyle
   ): void {
     // Remove previous GeoJSON layer
     if (this.geojsonLayer) {
@@ -64,9 +71,9 @@ export class ChoroplethMap {
           }
         }
         return {
-          color: '#fff',
-          weight: 1,
-          fillOpacity: 0.5,
+          color: style.strokeColor,
+          weight: style.strokeWidth,
+          fillOpacity: style.fillOpacity,
           fillColor,
         };
       },

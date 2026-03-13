@@ -39,5 +39,25 @@ export const plugin = new PanelPlugin<ChoroplethOptions>(ChoroplethPanel).setPan
       name: 'Auto Fit Bounds',
       description: 'Automatically fit the map to visible features when data refreshes',
       defaultValue: true,
+    })
+    .addColorPicker({
+      path: 'strokeColor',
+      name: 'Stroke Color',
+      description: 'Border color of polygons',
+      defaultValue: '#ffffff',
+    })
+    .addSliderInput({
+      path: 'strokeWidth',
+      name: 'Stroke Width',
+      description: 'Border width of polygons',
+      defaultValue: 1,
+      settings: { min: 0, max: 10, step: 0.5 },
+    })
+    .addSliderInput({
+      path: 'fillOpacity',
+      name: 'Fill Opacity',
+      description: 'Opacity of polygon fill',
+      defaultValue: 0.5,
+      settings: { min: 0, max: 1, step: 0.05 },
     });
 });

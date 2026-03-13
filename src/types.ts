@@ -11,4 +11,10 @@ export interface ChoroplethOptions {
   geoJsonKey: string;
   /** Automatically fit the map to visible features when data refreshes */
   autoFitBounds: boolean;
+  /** Border color of polygons (hex) */
+  strokeColor: string;
+  /** Border width of polygons */
+  strokeWidth: number;
+  /** Opacity of polygon fill (0–1) */
+  fillOpacity: number;
 }
