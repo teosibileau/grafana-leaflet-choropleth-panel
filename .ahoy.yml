@@ -1,23 +1,15 @@
 ahoyapi: v2
-usage: Cli app for development using ahoy.
+usage: Helpers for Docker
 commands:
   docker:
     usage: Lists available commands
     imports:
       - .ahoy/docker.ahoy.yml
 
-  scrap:
-    usage: Run spiders
-    cmd: ahoy docker run scraper scrapy runspider spiders.py
-
-  setup:
-    usage: Setup all defaults
+  reset-influx:
+    usage: Resets the InfluxDB database
     cmd: |
-      ahoy docker run defaults python /code/create_defaults.py
-      ahoy docker exec geo python /code/manage.py migrate
-      ahoy docker exec geo python /code/manage.py preload_citi_polygons
-
-  backup:
-    usage: Backups grafana dashboards
-    cmd: |
-      ahoy docker run defaults python /code/backup_dashboards.py
+      ahoy docker stop influxdb
+      ahoy docker destroy influxdb
+      VOL=$(docker-compose volumes | grep influxdb-data | awk '{print $2}') && [ -n "$VOL" ] && docker volume rm $VOL || true
+      ahoy docker up influxdb

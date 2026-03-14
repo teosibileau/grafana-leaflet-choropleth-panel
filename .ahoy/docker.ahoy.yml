@@ -1,16 +1,16 @@
 ahoyapi: v2
 commands:
   stop:
-    cmd: "ahoy docker compose stop $@"
+    cmd: 'ahoy docker compose stop $@'
     usage: Stop the docker-compose containers (non-destructive).
   ps:
-    cmd: "ahoy docker compose ps"
+    cmd: 'ahoy docker compose ps'
     usage: List the running docker-compose containers.
   reset:
-    cmd: "ahoy docker compose stop $@ && ahoy docker compose rm $@ && ahoy docker compose up -d $@"
+    cmd: 'ahoy docker compose stop $@ && ahoy docker compose rm $@ && ahoy docker compose up -d $@'
     usage: Destroy and then restart the docker compose containers.
   destroy:
-    cmd: "ahoy docker compose stop $@ && ahoy docker compose rm $@"
+    cmd: 'ahoy docker compose stop $@ && ahoy docker compose rm $@'
     usage: Destroy all the docker compose containers. (use before deleting folder)
   exec:
     cmd: |
@@ -33,15 +33,15 @@ commands:
     cmd: |
       ahoy docker compose run $@
   up:
-    cmd: "ahoy docker compose up -d $@"
+    cmd: 'ahoy docker compose up -d $@'
     usage: Start the docker-compose containers.
   build:
-    cmd: "ahoy docker compose build $@"
+    cmd: 'ahoy docker compose build $@'
     usage: Builds buildable docker-compose containers
   compose:
     usage: Abstraction for docker-compose
     cmd: |
-      docker-compose -f docker-compose.yml $COMPOSE_FLAGS -p "${PWD##*/}" $@
+      docker-compose -f docker-compose.yaml $COMPOSE_FLAGS -p "${PWD##*/}" $@
   cleanup:
     usage: Clean ups docker unused images and volumes. See http://blog.yohanliyanage.com/2015/05/docker-clean-up-after-yourself/.
     cmd: |
