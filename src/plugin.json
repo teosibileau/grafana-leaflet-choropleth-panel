@@ -6,9 +6,21 @@
     "description": "Choropleth map panel using Leaflet and chroma-js for Grafana",
     "author": {
       "name": "Teofilo Sibileau",
-      "url": "https://github.com/drkloc"
+      "url": "https://github.com/teosibileau"
     },
     "keywords": ["leaflet", "choropleth", "panel", "map", "geojson"],
+    "links": [
+      {
+        "name": "GitHub",
+        "url": "https://github.com/teosibileau/grafana-leaflet-choropleth-panel"
+      }
+    ],
+    "screenshots": [
+      {
+        "name": "Choropleth map",
+        "path": "img/screenshot-choropleth.png"
+      }
+    ],
     "logos": {
       "small": "img/logo.svg",
       "large": "img/logo.svg"

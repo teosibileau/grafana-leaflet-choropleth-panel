@@ -30,14 +30,16 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 22,
-        "w": 24,
+        "h": 14,
+        "w": 12,
         "x": 0,
         "y": 0
       },
       "id": 1,
       "options": {
+        "autoFitBounds": true,
         "coldColor": "dark-purple",
+        "fillOpacity": 0.5,
         "geoJsonData": {
           "features": [
             {
@@ -3002,6 +3004,8 @@
         "initialZoom": 1,
         "seriesCountSize": "sm",
         "showSeriesCount": false,
+        "strokeColor": "#ffffff",
+        "strokeWidth": 1,
         "text": "Default value of text input option"
       },
       "pluginVersion": "2.0.0",
@@ -3017,21 +3021,8 @@
           "resultFormat": "time_series"
         }
       ],
-      "title": "Sample Panel Title",
+      "title": "Sample Choropleth",
       "type": "teosibileau-leafletchoropleth-panel"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 22
-      },
-      "id": 3,
-      "panels": [],
-      "title": "Aggregated Data",
-      "type": "row"
     },
     {
       "datasource": {
@@ -3040,15 +3031,42 @@
       },
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
           "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
             },
-            "footer": {
-              "reducers": []
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 1,
+            "scaleDistribution": {
+              "type": "linear"
             },
-            "inspect": false
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
           },
           "mappings": [],
           "thresholds": {
@@ -3068,31 +3086,72 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
-        "w": 24,
-        "x": 0,
-        "y": 23
+        "h": 14,
+        "w": 12,
+        "x": 12,
+        "y": 0
       },
       "id": 4,
       "options": {
-        "cellHeight": "sm",
-        "showHeader": true
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
       },
       "pluginVersion": "12.4.0",
       "targets": [
         {
+          "alias": "$tag_departamento",
           "datasource": {
             "type": "influxdb",
             "uid": "influxdb-rio-negro"
           },
+          "groupBy": [
+            {
+              "params": ["departamento::tag"],
+              "type": "tag"
+            }
+          ],
+          "measurement": "metric",
+          "orderByTime": "ASC",
+          "policy": "default",
           "query": "SELECT last(\"value\") FROM \"metric\" WHERE $timeFilter GROUP BY \"departamento\" fill(none)",
-          "rawQuery": true,
+          "rawQuery": false,
           "refId": "A",
-          "resultFormat": "table"
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": ["value"],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": []
         }
       ],
-      "title": "Data by Departamento",
-      "type": "table"
+      "title": "Sample Data",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 3,
+      "panels": [],
+      "title": "Aggregated Data",
+      "type": "row"
     }
   ],
   "preload": false,

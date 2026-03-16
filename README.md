@@ -2,6 +2,8 @@
 
 Cross-reference time-series metric data with GeoJSON to display colored polygons on a Leaflet map. A [choropleth map](https://en.wikipedia.org/wiki/Choropleth_map) shades regions proportionally to a statistical variable, making it easy to visualize how a measurement varies across geographic areas.
 
+![Choropleth panel screenshot](https://raw.githubusercontent.com/teosibileau/grafana-leaflet-choropleth-panel/master/src/img/screenshot-choropleth.png)
+
 ## Requirements
 
 - Grafana >= 10.0.0
