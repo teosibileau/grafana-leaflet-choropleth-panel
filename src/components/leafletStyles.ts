@@ -1,12 +1,5 @@
 import { css } from '@emotion/css';
 
-/**
- * Leaflet core CSS inlined as Emotion css-in-js, scoped to the container element.
- * This replaces `import 'leaflet/dist/leaflet.css'` which is not permitted by
- * Grafana's plugin validator.
- *
- * Source: leaflet 1.9.4 — leaflet/dist/leaflet.css
- */
 export const leafletStyles = css`
   /* required styles */
   .leaflet-pane,
