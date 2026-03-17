@@ -4,8 +4,7 @@ import { useTheme2 } from '@grafana/ui';
 import { ChoroplethOptions } from '../types';
 import { ChoroplethMap } from './ChoroplethMap';
 import type { FeatureCollection } from 'geojson';
-
-import 'leaflet/dist/leaflet.css';
+import { leafletStyles } from './leafletStyles';
 
 interface Props extends PanelProps<ChoroplethOptions> {}
 
@@ -127,5 +126,5 @@ export const ChoroplethPanel: React.FC<Props> = ({ options, data, width, height 
     );
   }
 
-  return <div ref={containerRef} style={{ width, height }} />;
+  return <div ref={containerRef} className={leafletStyles} style={{ width, height }} />;
 };
