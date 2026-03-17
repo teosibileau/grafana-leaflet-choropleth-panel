@@ -11,8 +11,6 @@
     "lint": "eslint --cache .",
     "lint:fix": "pnpm lint -- --fix && prettier --write --list-different .",
     "server": "docker compose up --build",
-    "e2e": "npx playwright test",
-    "e2e:update": "npx playwright install chromium",
     "sign": "pnpm dlx @grafana/sign-plugin@latest",
     "prepare": "husky"
   },
@@ -29,9 +27,7 @@
   "license": "MIT",
   "devDependencies": {
     "@grafana/eslint-config": "^9.0.0",
-    "@grafana/plugin-e2e": "^3.4.7",
     "@grafana/tsconfig": "^2.0.1",
-    "@playwright/test": "^1.58.2",
     "@stylistic/eslint-plugin-ts": "^4.4.0",
     "@swc/core": "^1.15.0",
     "@swc/helpers": "^0.5.0",

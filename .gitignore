@@ -7,6 +7,3 @@ coverage/
 *.log
 .cache/
 .DS_Store
-test-results/
-playwright-report/
-playwright/.auth/
