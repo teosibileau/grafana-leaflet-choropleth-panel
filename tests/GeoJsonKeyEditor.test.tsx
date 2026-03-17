@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { GeoJsonKeyEditor } from './GeoJsonKeyEditor';
+import { GeoJsonKeyEditor } from '../src/components/GeoJsonKeyEditor';
 import type { FeatureCollection } from 'geojson';
-import type { ChoroplethOptions } from '../types';
+import type { ChoroplethOptions } from '../src/types';
 
 const geoJson: FeatureCollection = {
   type: 'FeatureCollection',

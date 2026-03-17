@@ -1,12 +1,12 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { FieldType, LoadingState, toDataFrame } from '@grafana/data';
-import { mapDataToFeatures, ChoroplethPanel } from './ChoroplethPanel';
-import type { ChoroplethOptions } from '../types';
+import { mapDataToFeatures, ChoroplethPanel } from '../src/components/ChoroplethPanel';
+import type { ChoroplethOptions } from '../src/types';
 import type { FeatureCollection } from 'geojson';
 
 // Mock ChoroplethMap to avoid Leaflet Canvas issues in jsdom
-jest.mock('./ChoroplethMap', () => ({
+jest.mock('../src/components/ChoroplethMap', () => ({
   ChoroplethMap: jest.fn().mockImplementation(() => ({
     remove: jest.fn(),
     resize: jest.fn(),
