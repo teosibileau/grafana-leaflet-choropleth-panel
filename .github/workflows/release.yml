@@ -6,7 +6,9 @@ on:
       - 'v*'
 
 permissions:
+  id-token: write
   contents: write
+  attestations: write
 
 jobs:
   release:
@@ -61,6 +63,11 @@ jobs:
 
       - name: Validate plugin
         run: pnpm dlx @grafana/plugin-validator@latest -sourceCodeUri file://. teosibileau-leafletchoropleth-panel-${GITHUB_REF_NAME}.zip
+
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: teosibileau-leafletchoropleth-panel-${{ github.ref_name }}.zip
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
