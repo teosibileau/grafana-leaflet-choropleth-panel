@@ -23,13 +23,23 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build
 
+      - name: Sign plugin
+        run: pnpm dlx @grafana/sign-plugin@latest
+        env:
+          GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+
       - name: Package plugin
         run: |
           mv dist teosibileau-leafletchoropleth-panel
-          cp -r .docker/grafana/provisioning teosibileau-leafletchoropleth-panel/provisioning
-          mkdir -p teosibileau-leafletchoropleth-panel/influxdb-init
-          cp .docker/influxdb/init.sh teosibileau-leafletchoropleth-panel/influxdb-init/
-          cat > teosibileau-leafletchoropleth-panel/docker-compose.yaml << 'COMPOSE'
+          zip -r teosibileau-leafletchoropleth-panel-${GITHUB_REF_NAME}.zip teosibileau-leafletchoropleth-panel
+
+      - name: Package demo bundle
+        run: |
+          cp -r teosibileau-leafletchoropleth-panel teosibileau-leafletchoropleth-panel-demo
+          cp -r .docker/grafana/provisioning teosibileau-leafletchoropleth-panel-demo/provisioning
+          mkdir -p teosibileau-leafletchoropleth-panel-demo/influxdb-init
+          cp .docker/influxdb/init.sh teosibileau-leafletchoropleth-panel-demo/influxdb-init/
+          cat > teosibileau-leafletchoropleth-panel-demo/docker-compose.yaml << 'COMPOSE'
           services:
             influxdb:
               image: influxdb:1.8
@@ -40,7 +50,6 @@ jobs:
                 - ./influxdb-init:/docker-entrypoint-initdb.d
               environment:
                 INFLUXDB_DB: rio_negro
-
             grafana:
               image: grafana/grafana-enterprise:12.4.0
               ports:
@@ -55,11 +64,10 @@ jobs:
                 GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: teosibileau-leafletchoropleth-panel
               depends_on:
                 - influxdb
-
           volumes:
             influxdb-data:
           COMPOSE
-          zip -r teosibileau-leafletchoropleth-panel-${GITHUB_REF_NAME}.zip teosibileau-leafletchoropleth-panel
+          zip -r teosibileau-leafletchoropleth-panel-demo-${GITHUB_REF_NAME}.zip teosibileau-leafletchoropleth-panel-demo
 
       - name: Validate plugin
         run: pnpm dlx @grafana/plugin-validator@latest -sourceCodeUri file://. teosibileau-leafletchoropleth-panel-${GITHUB_REF_NAME}.zip
@@ -73,4 +81,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
-          files: teosibileau-leafletchoropleth-panel-*.zip
+          files: |
+            teosibileau-leafletchoropleth-panel-${{ github.ref_name }}.zip
+            teosibileau-leafletchoropleth-panel-demo-${{ github.ref_name }}.zip
